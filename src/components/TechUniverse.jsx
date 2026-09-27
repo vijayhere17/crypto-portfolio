@@ -28,12 +28,16 @@ export default function TechUniverse() {
         </div>
 
         <div className="relative mt-6">
-          <LazyCanvas
-            className="h-[440px] w-full md:h-[620px]"
-            camera={{ position: [0, 0, isMobile ? 10 : 8.5], fov: 45 }}
-          >
-            <OrbitGraph items={stack} centerLabel="TECH STACK" active={active} onSelect={select} layout="sphere" radius={isMobile ? 2.6 : 3.1} compact={isMobile} />
-          </LazyCanvas>
+          <div className="relative">
+            <LazyCanvas
+              className="h-[440px] w-full md:h-[620px]"
+              camera={{ position: [0, 0, isMobile ? 10 : 8.5], fov: 45 }}
+            >
+              <OrbitGraph items={stack} active={active} onSelect={select} layout="sphere" radius={isMobile ? 2.4 : 3.1} compact={isMobile} />
+            </LazyCanvas>
+            {/* the hub always projects to the canvas centre */}
+            <span className="center-label pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">TECH STACK</span>
+          </div>
           <GraphPanel
             items={stack}
             active={active}

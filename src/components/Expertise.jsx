@@ -30,12 +30,16 @@ export default function Expertise() {
         </div>
 
         <div className="lg:col-span-8">
-          <LazyCanvas
-            className="relative h-[440px] w-full md:h-[600px] lg:h-[680px]"
-            camera={{ position: [0, 0, isMobile ? 10.5 : 9], fov: 45 }}
-          >
-            <OrbitGraph items={expertise} centerLabel="WEB3 / CRYPTO" active={active} onSelect={select} radius={isMobile ? 2.7 : 3.3} compact={isMobile} />
-          </LazyCanvas>
+          <div className="relative">
+            <LazyCanvas
+              className="relative h-[440px] w-full md:h-[600px] lg:h-[680px]"
+              camera={{ position: [0, 0, isMobile ? 10.5 : 9], fov: 45 }}
+            >
+              <OrbitGraph items={expertise} active={active} onSelect={select} radius={isMobile ? 2.5 : 3.3} compact={isMobile} />
+            </LazyCanvas>
+            {/* the hub always projects to the canvas centre */}
+            <span className="center-label pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">WEB3 / CRYPTO</span>
+          </div>
           <GraphPanel items={expertise} active={active} onSelect={select} className="lg:hidden" />
         </div>
       </div>

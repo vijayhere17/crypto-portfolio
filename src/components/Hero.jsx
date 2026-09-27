@@ -42,7 +42,7 @@ export default function Hero() {
   const { lead, joiner, accent, tail } = site.statement
 
   return (
-    <section id="top" ref={root} className="relative h-[100svh] min-h-[640px] overflow-hidden">
+    <section id="top" ref={root} className="relative min-h-[100svh] overflow-hidden">
       {/* outer wrapper fades on scroll, inner one plays the intro — kept separate so they don't fight */}
       <div data-canvas-scroll className="absolute inset-0">
         <div data-canvas className="absolute inset-0">
@@ -57,7 +57,7 @@ export default function Hero() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,transparent_40%,#08080a_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" />
 
-      <div data-content className="container-x pointer-events-none relative flex h-full flex-col justify-end pb-8 pt-28 md:pb-10">
+      <div data-content className="container-x pointer-events-none relative flex min-h-[100svh] flex-col justify-end pb-8 pt-32 md:pb-10 md:pt-36">
         <p data-fade className="mb-5 font-mono text-[0.72rem] uppercase tracking-[0.22em] text-accent md:mb-7">
           {site.disciplines.join('  •  ')}
         </p>

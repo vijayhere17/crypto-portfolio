@@ -8,15 +8,15 @@ export default function Ecosystem({ onOpen }) {
   const isMobile = useIsMobile()
   const [hover, setHover] = useState(-1)
 
-  // Desktop: services orbit the hub. Mobile: hub on top, services in two columns below.
-  const view = isMobile ? { w: 400, h: 700, rx: 0, ry: 0, font: 17 } : { w: 1100, h: 660, rx: 430, ry: 240, font: 15 }
+  // Desktop: services orbit the hub. Mobile: a tree — hub on top, branches alternating left/right.
+  const view = isMobile ? { w: 400, h: 760, rx: 0, ry: 0, font: 17 } : { w: 1100, h: 660, rx: 430, ry: 240, font: 15 }
   const cx = view.w / 2
   const cy = isMobile ? 90 : view.h / 2
 
   const nodes = useMemo(
     () =>
       services.map((s, i) => {
-        if (isMobile) return { ...s, x: i % 2 ? 222 : 38, y: 240 + Math.floor(i / 2) * 100, i }
+        if (isMobile) return { ...s, x: i % 2 ? 252 : 148, y: 230 + i * 54, i }
         const a = (i / services.length) * Math.PI * 2 - Math.PI / 2
         return { ...s, x: cx + Math.cos(a) * view.rx, y: cy + Math.sin(a) * view.ry, i }
       }),
@@ -26,7 +26,7 @@ export default function Ecosystem({ onOpen }) {
   // Decorative background nodes — the wider network everything lives in.
   const dust = useMemo(() => {
     const out = []
-    for (let i = 0; i < (isMobile ? 18 : 34); i++) {
+    for (let i = 0; i < (isMobile ? 0 : 34); i++) {
       const a = i * 2.399963
       const r = 0.35 + (((i * 37) % 100) / 100) * 0.85
       if (isMobile) out.push({ x: 20 + ((i * 97) % 360), y: 170 + ((i * 131) % 520) })
@@ -60,7 +60,10 @@ export default function Ecosystem({ onOpen }) {
 
   // Label placement: beside the node on mobile, above/below on desktop.
   const labelPos = (n) => {
-    if (isMobile) return { x: n.x + 32, y: n.y + 1, sub: n.y + 20, anchor: 'start' }
+    if (isMobile) {
+      const right = n.x > cx
+      return { x: n.x + (right ? 32 : -32), y: n.y + 1, sub: n.y + 20, anchor: right ? 'start' : 'end' }
+    }
     const below = n.y >= cy
     return { x: n.x, y: below ? n.y + 50 : n.y - 56, sub: below ? n.y + 69 : n.y - 37, anchor: 'middle' }
   }
@@ -99,16 +102,33 @@ export default function Ecosystem({ onOpen }) {
 
           {!isMobile && <ellipse cx={cx} cy={cy} rx={view.rx} ry={view.ry} fill="none" stroke="#fff" strokeOpacity="0.08" strokeDasharray="2 8" />}
 
+          {/* mobile: the trunk of the tree */}
+          {isMobile && (
+            <line data-link x1={cx} y1={cy + 48} x2={cx} y2={nodes[nodes.length - 1].y} pathLength="1" strokeDasharray="1" stroke="#ff5b24" strokeOpacity="0.45" strokeWidth="1.5" />
+          )}
+
           {nodes.map((n, i) => {
-            // Mobile links each node to the one below it; desktop links around the orbit.
-            const nx = isMobile ? nodes[i + 2] ?? n : nodes[(i + 1) % nodes.length]
             const hot = hover === i
+            // Desktop: straight spoke from the hub. Mobile: down the trunk, then along a branch.
+            const route = isMobile ? `M${cx},${cy + 48} V${n.y} H${n.x}` : `M${cx},${cy} L${n.x},${n.y}`
+            const nx = nodes[(i + 1) % nodes.length]
             return (
               <g key={n.id}>
-                <line data-link x1={cx} y1={cy} x2={n.x} y2={n.y} pathLength="1" strokeDasharray="1" stroke={hot ? '#ff5b24' : '#fff'} strokeOpacity={hot ? 0.9 : 0.16} strokeWidth={hot ? 1.5 : 1} style={{ transition: 'stroke .3s, stroke-opacity .3s' }} />
-                <line data-link x1={n.x} y1={n.y} x2={nx.x} y2={nx.y} pathLength="1" strokeDasharray="1" stroke="#fff" strokeOpacity="0.1" />
+                <path
+                  data-link
+                  d={isMobile ? `M${cx},${n.y} H${n.x}` : route}
+                  pathLength="1"
+                  strokeDasharray="1"
+                  fill="none"
+                  stroke={hot ? '#ff5b24' : '#fff'}
+                  strokeOpacity={hot ? 0.9 : isMobile ? 0.3 : 0.16}
+                  strokeWidth={hot ? 1.5 : 1}
+                  style={{ transition: 'stroke .3s, stroke-opacity .3s' }}
+                />
+                {!isMobile && <line data-link x1={n.x} y1={n.y} x2={nx.x} y2={nx.y} pathLength="1" strokeDasharray="1" stroke="#fff" strokeOpacity="0.1" />}
+                {isMobile && <circle cx={cx} cy={n.y} r="3" fill="#ff5b24" />}
                 <circle r="3" fill="#ff5b24">
-                  <animateMotion dur={`${2.4 + (i % 5) * 0.4}s`} repeatCount="indefinite" path={`M${cx},${cy} L${n.x},${n.y}`} />
+                  <animateMotion dur={`${2.4 + (i % 5) * 0.4}s`} repeatCount="indefinite" path={route} />
                 </circle>
               </g>
             )

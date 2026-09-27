@@ -24,7 +24,7 @@ function layoutPositions(count, layout, radius) {
  * A central hub with labelled satellite nodes connected like a network.
  * Used for the Expertise ecosystem (ring) and the Tech universe (sphere).
  */
-export default function OrbitGraph({ items, centerLabel, active, onSelect, layout = 'ring', radius = 3.2, compact = false }) {
+export default function OrbitGraph({ items, active, onSelect, layout = 'ring', radius = 3.2, compact = false }) {
   const group = useRef()
   const core = useRef()
   const pulse = useRef()
@@ -67,7 +67,7 @@ export default function OrbitGraph({ items, centerLabel, active, onSelect, layou
     positions.forEach((p, i) => {
       const node = nodeRefs.current[i]
       if (node) {
-        const target = i === active ? 2.2 : 1
+        const target = i === active ? (compact ? 3 : 2.2) : 1
         node.scale.setScalar(node.scale.x + (target - node.scale.x) * k)
         node.material.color.lerp(i === active ? ACCENT : NODE, k)
       }
@@ -98,9 +98,6 @@ export default function OrbitGraph({ items, centerLabel, active, onSelect, layou
         <sphereGeometry args={[0.5, 32, 32]} />
         <meshBasicMaterial color="#0d0d11" />
       </mesh>
-      <Html center zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
-        <span className="center-label">{centerLabel}</span>
-      </Html>
 
       {/* orbits */}
       {(layout === 'sphere' ? [0, 1.1, -1.1] : [0]).map((r, i) => (
@@ -136,8 +133,8 @@ export default function OrbitGraph({ items, centerLabel, active, onSelect, layou
           <mesh onClick={() => onSelect(i)} visible={false}>
             <sphereGeometry args={[0.38, 8, 8]} />
           </mesh>
-          {/* on small screens only the selected label is shown, to avoid overlap */}
-          {(!compact || i === active) && (
+          {/* on small screens the detail card below names the selection, so no floating labels */}
+          {!compact && (
           <Html
             ref={(el) => (labelRefs.current[i] = el)}
             position={[0, 0.34, 0]}

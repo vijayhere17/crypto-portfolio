@@ -133,6 +133,8 @@ html.lenis body { height: auto; }
     border-color: var(--color-accent);
   }
   .center-label {
+    text-shadow: 0 0 12px #08080a, 0 0 4px #08080a;
+    z-index: 2;
     white-space: nowrap;
     font-family: var(--font-mono);
     font-size: 11px;
