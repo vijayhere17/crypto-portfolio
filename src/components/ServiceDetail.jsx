@@ -112,10 +112,10 @@ export default function ServiceDetail({ index, onClose, onNavigate }) {
           </ol>
         </div>
 
-        <div data-cs className="mt-20 flex flex-col items-start justify-between gap-6 rounded-2xl border border-line bg-ink-2 p-8 md:mt-28 md:flex-row md:items-center md:p-10">
+        <div data-cs className="mt-20 flex flex-col items-start justify-between gap-6 rounded-2xl bg-gradient-to-br from-accent to-[#ff7a3d] p-8 text-white shadow-[0_30px_80px_rgba(255,91,36,.25)] md:mt-28 md:flex-row md:items-center md:p-10">
           <div>
             <p className="display text-[clamp(1.8rem,3vw,2.6rem)]">Planning a {service.short} project?</p>
-            <p className="mt-2 text-white/55">Tell us the idea — we’ll reply on Telegram with scope and next steps.</p>
+            <p className="mt-2 text-white/85">Tell us the idea — we’ll reply on Telegram with scope and next steps.</p>
           </div>
           <a href={telegramUrl} target="_blank" rel="noreferrer" className="btn btn-light shrink-0">
             Discuss on Telegram

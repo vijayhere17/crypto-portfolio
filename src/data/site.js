@@ -6,7 +6,6 @@
 
 export const site = {
   brand: 'ROCYWEB',
-  brandParts: ['ROCY', 'WEB'],
   domain: 'rocyweb.com',
   brandSuffix: 'Blockchain Development Studio',
   disciplines: ['Blockchain', 'DeFi', 'Exchanges', 'NFT', 'Tokens'],

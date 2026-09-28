@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { services } from '../data/services'
 import { site } from '../data/site'
+import { MARK_SRC } from './Logo'
 import { gsap, revealIn, useGSAP, useIsMobile } from '../lib/motion'
 
 export default function Ecosystem({ onOpen }) {
@@ -135,13 +136,14 @@ export default function Ecosystem({ onOpen }) {
           })}
 
           <circle cx={cx} cy={cy} r="120" fill="url(#hubGlow)" />
-          <circle cx={cx} cy={cy} r="64" fill="none" stroke="#ff5b24" strokeOpacity="0.5" strokeDasharray="3 6">
+          <circle cx={cx} cy={cy} r="66" fill="none" stroke="#ff5b24" strokeOpacity="0.5" strokeDasharray="3 6">
             <animateTransform attributeName="transform" type="rotate" from={`0 ${cx} ${cy}`} to={`360 ${cx} ${cy}`} dur="30s" repeatCount="indefinite" />
           </circle>
-          <circle cx={cx} cy={cy} r="48" fill="#0f0f13" stroke="#ff5b24" strokeWidth="1.5" />
-          <text x={cx} y={cy + 5} textAnchor="middle" fill="#fff" fontSize={isMobile ? 13 : 14} fontWeight="800" letterSpacing="1.5">
-            {site.brand}
-          </text>
+          {/* the hub is the logo itself — no text; a dark disc keeps spokes from showing through it */}
+          <circle cx={cx} cy={cy} r="40" fill="#0b0b0e" />
+          <image href={MARK_SRC} x={cx - 46} y={cy - 46} width="92" height="92">
+            <title>{site.brand}</title>
+          </image>
 
           {nodes.map((n) => {
             const l = labelPos(n)

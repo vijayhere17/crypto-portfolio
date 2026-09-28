@@ -110,7 +110,7 @@ export default function Contact() {
 
       <footer className="relative border-t border-line">
         <div className="container-x flex flex-col items-center justify-between gap-4 py-7 text-sm text-mute sm:flex-row">
-          <Logo className="text-white" />
+          <Logo />
           <p>
             © {new Date().getFullYear()} {site.brand} — {site.brandSuffix}
           </p>

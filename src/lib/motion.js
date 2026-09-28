@@ -10,6 +10,27 @@ export { gsap, ScrollTrigger, useGSAP }
 export const LenisContext = createContext(null)
 export const useLenis = () => useContext(LenisContext)
 
+/*
+ * "App ready" signal — fired by the preloader as it exits, so intro
+ * animations play when the page is actually revealed, not behind the loader.
+ */
+let ready = false
+const readyCallbacks = new Set()
+export function markReady() {
+  if (ready) return
+  ready = true
+  readyCallbacks.forEach((cb) => cb())
+  readyCallbacks.clear()
+}
+export function onReady(cb) {
+  if (ready) {
+    cb()
+    return () => {}
+  }
+  readyCallbacks.add(cb)
+  return () => readyCallbacks.delete(cb)
+}
+
 /** Smoothly scroll to an in-page anchor, falling back to native scrolling. */
 export function scrollToTarget(lenis, target) {
   if (lenis) lenis.scrollTo(target, { offset: 0, duration: 1.4 })

@@ -3,7 +3,7 @@ import LazyCanvas from '../three/LazyCanvas'
 import CryptoScene from '../three/CryptoScene'
 import { site } from '../data/site'
 import { Arrow } from './Navbar'
-import { gsap, ScrollTrigger, scrollToTarget, useGSAP, useIsMobile, useLenis } from '../lib/motion'
+import { gsap, onReady, ScrollTrigger, scrollToTarget, useGSAP, useIsMobile, useLenis } from '../lib/motion'
 
 export default function Hero() {
   const root = useRef(null)
@@ -13,9 +13,13 @@ export default function Hero() {
 
   useGSAP(
     () => {
-      gsap.from('[data-line] > span', { yPercent: 115, duration: 1.4, ease: 'expo.out', stagger: 0.09, delay: 0.25 })
-      gsap.from('[data-fade]', { autoAlpha: 0, y: 24, duration: 1.1, ease: 'power3.out', stagger: 0.08, delay: 0.85 })
-      gsap.from('[data-canvas]', { autoAlpha: 0, scale: 1.08, duration: 2.2, ease: 'power2.out' })
+      // Intro is built paused (so the hero starts hidden) and plays once the preloader reveals the page.
+      const intro = gsap.timeline({ paused: true })
+      intro
+        .from('[data-canvas]', { autoAlpha: 0, scale: 1.08, duration: 2.2, ease: 'power2.out' }, 0)
+        .from('[data-line] > span', { yPercent: 115, duration: 1.4, ease: 'expo.out', stagger: 0.09 }, 0.15)
+        .from('[data-fade]', { autoAlpha: 0, y: 24, duration: 1.1, ease: 'power3.out', stagger: 0.08 }, 0.7)
+      const offReady = onReady(() => intro.play())
 
       ScrollTrigger.create({
         trigger: root.current,
@@ -35,6 +39,7 @@ export default function Hero() {
         ease: 'none',
         scrollTrigger: { trigger: root.current, start: '30% top', end: 'bottom top', scrub: true },
       })
+      return offReady
     },
     { scope: root },
   )
@@ -68,7 +73,7 @@ export default function Hero() {
           </span>
           <span data-line className="block overflow-hidden pb-[0.08em]">
             <span className="block">
-              {joiner && `${joiner} `}<em className="font-serif font-normal italic tracking-[-0.02em] text-accent-soft">{accent}</em>{' '}
+              {joiner && `${joiner} `}<em className="text-brand-gradient pr-[0.06em] font-serif font-normal italic tracking-[-0.02em]">{accent}</em>{' '}
               {tail.split(' ').flatMap((w, i) => [
                 i > 0 ? ' ' : null,
                 <span key={i} className="whitespace-nowrap">

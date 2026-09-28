@@ -22,7 +22,8 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    background: var(--color-ink);
+    /* transparent so the fixed ambient layer (z-index -1) shows through; html keeps the base colour */
+    background: transparent;
     font-family: var(--font-sans);
     overflow-x: clip;
   }
@@ -178,3 +179,57 @@ html.lenis body { height: auto; }
 @media (pointer: coarse) {
   .node-label { padding: 10px 16px; font-size: 13px; }
 }
+
+/* Marquee bands */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.animate-marquee { animation: marquee 38s linear infinite; }
+.animate-marquee-rev { animation: marquee 44s linear infinite reverse; }
+
+/* White → orange gradient text, echoing the logo ribbon */
+.text-brand-gradient {
+  background: linear-gradient(100deg, #ffffff 0%, #ffd2bd 30%, #ff8a5c 60%, #ff5b24 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Ambient page background: drifting orange + white glows over a faint grid */
+.bg-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bg-ambient::before,
+.bg-ambient::after {
+  content: "";
+  position: absolute;
+  width: 70vmax;
+  height: 70vmax;
+  border-radius: 999px;
+  filter: blur(40px);
+}
+.bg-ambient::before {
+  top: -30vmax;
+  right: -25vmax;
+  background: radial-gradient(closest-side, rgba(255, 91, 36, 0.13), transparent);
+  animation: drift-a 26s ease-in-out infinite alternate;
+}
+.bg-ambient::after {
+  bottom: -35vmax;
+  left: -30vmax;
+  background: radial-gradient(closest-side, rgba(255, 240, 230, 0.06), transparent);
+  animation: drift-b 32s ease-in-out infinite alternate;
+}
+.bg-ambient .grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent);
+}
+@keyframes drift-a { to { transform: translate(-18vmax, 22vmax) scale(1.15); } }
+@keyframes drift-b { to { transform: translate(22vmax, -16vmax) scale(1.1); } }

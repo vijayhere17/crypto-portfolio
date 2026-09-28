@@ -11,6 +11,8 @@ import Process from './components/Process'
 import WhyUs from './components/WhyUs'
 import Ecosystem from './components/Ecosystem'
 import Contact from './components/Contact'
+import Marquee from './components/Marquee'
+import Preloader from './components/Preloader'
 import { LenisContext, ScrollTrigger, gsap, useReducedMotion } from './lib/motion'
 
 export default function App() {
@@ -45,12 +47,17 @@ export default function App() {
 
   return (
     <LenisContext.Provider value={lenis}>
+      <Preloader />
+      <div className="bg-ambient" aria-hidden="true">
+        <div className="grid-lines" />
+      </div>
       <div className="grain" aria-hidden="true" />
       <Navbar />
       <main>
         <Hero />
         <About />
         <Services onOpen={setOpenService} />
+        <Marquee />
         <Expertise />
         <TechUniverse />
         <Process />
