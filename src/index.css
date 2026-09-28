@@ -16,6 +16,8 @@
 
 @layer base {
   html {
+    /* keep the scrollbar's space reserved so locking scroll (preloader, modal) never shifts layout */
+    scrollbar-gutter: stable;
     background: var(--color-ink);
     color: #f4f4f6;
     -webkit-font-smoothing: antialiased;
